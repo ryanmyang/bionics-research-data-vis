@@ -1,0 +1,2 @@
+Right,ShoulderPos:(-0.01, 0.63, 0.02),Plane:XZ,Radius:0.35
+touchedTargets: 
