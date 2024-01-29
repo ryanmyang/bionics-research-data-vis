@@ -4,7 +4,7 @@ from mpl_toolkits.mplot3d import Axes3D
 import numpy as np
 
 # JSON data
-with open('11_30_00_30_touched_sphere_coords_left.json') as cartesian_json_file:
+with open('./old/11_30_00_30_touched_sphere_coords_left.json') as cartesian_json_file:
     cartesian_data = json.load(cartesian_json_file)
 
 # Extract vectorList from the data
@@ -27,7 +27,7 @@ axis_limits = (-overall_size, overall_size)
 
 
 # Load JSON data
-with open('11_30_00_30_touched_sphere_polar_left.json') as spherical_json_file:
+with open('./old/11_30_00_30_touched_sphere_polar_left.json') as spherical_json_file:
     spherical_data = json.load(spherical_json_file)
 
 # Extract vectorList from the data
