@@ -2,6 +2,7 @@
 Data visualization and processing for my bionics research lab work
 
 Motorlearning Visualization:
+
 0. You need to have `pipenv` and `python3` in order to easily install the dependencies. [Pipenv Link](https://pipenv.pypa.io/en/latest/installation.html)
 1. Clone repository with `git clone https://github.com/ryanmyang/bionics-research-data-vis.git`
 2. `cd` into this folder `bionics-research-data-vis`
