@@ -6,9 +6,17 @@ import re
 import math
 from math_helper import normalize_vectors, pnt2line, distance
 
+
+# ====================================
+# ======== Filename at Bottom ========
+# ====================================
+
+
+
+
 class plane(Enum):
     XY = "Frontal"
-    YZ = "YZ"
+    YZ = "Sagittal"
     XZ = "Horizontal"
 
 
@@ -32,10 +40,10 @@ class motor_learning:
     
             # Process the first line differently
             self.process_first_line(first_line)
-            print(self.arm)
-            print(self.shoulder_pos)
-            print(self.plane)
-            print(self.game_radius)
+            # print(self.arm)
+            # print(self.shoulder_pos)
+            # print(self.plane)
+            # print(self.game_radius)
 
             # Process the remaining lines, including last line
             last_target = -1
@@ -43,7 +51,7 @@ class motor_learning:
                 words = line.split(',')
                 # print(words)
                 # Last line check
-                if len(words) < 6:
+                if words[0][0] == 't':
                     self.process_last_line(words)
                     break
                 # Normal line processing:
@@ -87,7 +95,7 @@ class motor_learning:
 
 
     def process_first_line(self, line: str):
-        print("Process first line")
+        # print("Process first line")
         pattern = r"(\w+),ShoulderPos:\(([-\d.]+), ([-\d.]+), ([-\d.]+)\),Plane:(\w+),Radius:([\d.]+)"
         # Use re.match to find matches in the string
         match = re.match(pattern, line)
@@ -99,8 +107,8 @@ class motor_learning:
             y_pos = float(match.group(3))
             z_pos = float(match.group(4))
             self.shoulder_pos = np.array([x_pos, y_pos, z_pos])
-            print("PLANE")
-            print(match.group(5))
+            # print("PLANE")
+            # print(match.group(5))
             self.plane = plane[match.group(5)]
             self.game_radius = float(match.group(6))
         else:
@@ -147,7 +155,6 @@ class motor_learning:
         ax = self.fig.add_subplot(111)
         ax.set_aspect('equal', adjustable='box')
         ax.margins(x=0.1,y=0.1)
-        ax.set_title("", y=1.05, fontsize=18)
         ax.set_title(f"Position of arm for each target\n{self.arm} arm, {self.plane.value} plane", fontsize=10)
 
         # Plot targets
@@ -174,8 +181,8 @@ class motor_learning:
             y_arr = np.array([(p[y] * y_adjust) for p in split_positions[i]])
             ax.plot(x_arr, y_arr, marker='.', linestyle='-', label=curr_target)
 
-            print("Target" + str(curr_target))
-            print(list(self.targets[curr_target-1]) +[0])
+            # print("Target" + str(curr_target))
+            # print(list(self.targets[curr_target-1]) +[0])
 
             # Calculate distances
             target_distances = []
@@ -186,10 +193,10 @@ class motor_learning:
 
             distances_squared = [(d ** 2) for d in target_distances]
             # print(f"Distances squared: {distances_squared}")
-            print(f"Max in distance square sum: {max(distances_squared)}")
+            # print(f"Max in distance square sum: {max(distances_squared)}")
             distance_square_sum = sum(distances_squared)
-            print(f"Distance square sum: {distance_square_sum}")
-            print(f"Split positions size for target: {len(split_positions[i])}")
+            # print(f"Distance square sum: {distance_square_sum}")
+            # print(f"Split positions size for target: {len(split_positions[i])}")
             rmsd = math.sqrt(distance_square_sum/len(target_distances))
             print(f"The RMSD for target {curr_target} is {rmsd}")
             print()
@@ -203,5 +210,3 @@ class motor_learning:
 if __name__ == "__main__":
     ml = motor_learning("MotorLearning_01_29_2024_20_59_28_Right_XZ_normal.txt")
     ml.plot_2d()
-    
-    
