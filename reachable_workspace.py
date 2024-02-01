@@ -67,7 +67,7 @@ ax_s.plot(u,v,w-0.7, color='black')
 # 2. Polar Line for 0
 polar_0 = math_helper.spherical_to_cartesian(r, 0, math.pi/2)
 ax_s.plot([0,polar_0[0]],[0,polar_0[1]],[0,polar_0[2]], color='black')
-ax_s.text(polar_0[0]+0.05,polar_0[1],polar_0[2], "θ=0")
+ax_s.text(polar_0[0]+0.05,polar_0[1],polar_0[2], "θ=0", fontsize=13)
 # 3. Elevation Line for 0
 elevation_0 = math_helper.spherical_to_cartesian(r, 0, 0)
 ax_s.plot([0,elevation_0[0]],[0,elevation_0[1]],[0,elevation_0[2]], color='black')
@@ -75,7 +75,7 @@ ax_s.plot([0,elevation_0[0]],[0,elevation_0[1]],[0,elevation_0[2]], color='black
 # 4. Elevation 45
 elevation_45 = math_helper.spherical_to_cartesian(r,0, math.pi/8)
 ax_s.plot([0,elevation_45[0]],[0,elevation_45[1]],[0,elevation_45[2]], color='black')
-ax_s.text(elevation_45[0]+0.025,elevation_45[1],elevation_45[2]+0.05, "ϕ=22.5")
+# ax_s.text(elevation_45[0]+0.025,elevation_45[1],elevation_45[2]+0.05, "ϕ=22.5")
 # 5. Box at 90 polar
 ax_s.plot([0,0,0,0,0],[0,single_max_radius,single_max_radius,0,0],[0,0,single_max_radius,single_max_radius,0], color='red',linestyle='-')
 

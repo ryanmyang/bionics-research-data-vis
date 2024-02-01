@@ -166,8 +166,8 @@ class motor_learning:
         ax.set_title(f"Motor Learning with {self.speed_set_times[0][0]} speed", fontsize=16)
         ax.set_ylabel("Y Axis (m)", fontsize=15)
         ax.set_xlabel("X Axis (m)", fontsize=15)
-        ax.tick_params(axis='both', which='major', labelsize=10)
-        ax.tick_params(axis='both', which='minor', labelsize=10)
+        ax.tick_params(axis='both', which='major', labelsize=12)
+        ax.tick_params(axis='both', which='minor', labelsize=12)
 
         ax.plot([0, self.targets[0][0]], [0,self.targets[0][1]], marker='o', linestyle='-', color='black', label='Desired Trajectory')
         ax.annotate(str(1), (self.targets[0][0],self.targets[0][1]), textcoords='offset points', xytext= (-3,-4) + (self.targets[0])*30)
