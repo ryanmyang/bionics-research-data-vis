@@ -91,7 +91,7 @@ class motor_learning:
             # print(f"SPEED SET TIMES: {self.speed_set_times}")
             self.targets = normalize_vectors(motor_learning.targets, self.game_radius)
             # print(f"TARGETS: {self.targets}")
-            self.fig = plt.figure()
+            self.fig = plt.figure(figsize=(10, 6), dpi=80)
 
 
     def process_first_line(self, line: str):
@@ -173,7 +173,7 @@ class motor_learning:
         # print("SPLIT POSITIONS")
         # print(len(split_positions))
         # print(split_positions)
-
+        RMSD_caption = "RMSD per target"
         # Plot all positions by iterating through the split positions
         for i in range(len(self.target_set_times)):
             curr_target = self.target_set_times[i][0]
@@ -198,15 +198,15 @@ class motor_learning:
             # print(f"Distance square sum: {distance_square_sum}")
             # print(f"Split positions size for target: {len(split_positions[i])}")
             rmsd = math.sqrt(distance_square_sum/len(target_distances))
+            RMSD_caption += f"\nTarget {curr_target}: {'{:.3f}'.format(rmsd)}"
             print(f"The RMSD for target {curr_target} is {rmsd}")
-            print()
             
-
+        ax.text(-0.45, 0, RMSD_caption, wrap=True, horizontalalignment='right', fontsize=8)
         ax.legend(bbox_to_anchor=(1.2, 1))
         plt.show()
              
 
 
 if __name__ == "__main__":
-    ml = motor_learning("MotorLearning_01_29_2024_20_59_28_Right_XZ_normal.txt")
+    ml = motor_learning("MotorLearning_01_31_2024_17_41_34_Left_XZ_fast.txt")
     ml.plot_2d()
