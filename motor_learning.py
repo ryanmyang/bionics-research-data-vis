@@ -68,8 +68,13 @@ class motor_learning:
                     self.speed_set_times.append([speed, time])
             
         target_set_times_times_only = [couple[1] for couple in self.target_set_times]
+        # print(self.target_set_times)
+        # print(target_set_times_times_only)
         # print(f"TSTTO: {target_set_times_times_only}")
         splitIndices = [np.searchsorted(self.times, t) for t in target_set_times_times_only]
+        # print(splitIndices)
+        # print(self.times[318])
+        # NOTE Something is weird with the data, the times reset randomly
         
         self.target_time_index_array = np.column_stack((self.target_set_times, splitIndices))
         
@@ -158,11 +163,14 @@ class motor_learning:
         ax = self.fig.add_subplot(111)
         ax.set_aspect('equal', adjustable='box')
         ax.margins(x=0.1,y=0.1)
-        ax.set_title(f"Motor Learning with {self.speed_set_times[0][0]} speed", fontsize=10)
-        ax.set_ylabel("Y Axis (m)")
-        ax.set_xlabel("X Axis (m)")
+        ax.set_title(f"Motor Learning with {self.speed_set_times[0][0]} speed", fontsize=16)
+        ax.set_ylabel("Y Axis (m)", fontsize=15)
+        ax.set_xlabel("X Axis (m)", fontsize=15)
+        ax.tick_params(axis='both', which='major', labelsize=10)
+        ax.tick_params(axis='both', which='minor', labelsize=10)
 
         ax.plot([0, self.targets[0][0]], [0,self.targets[0][1]], marker='o', linestyle='-', color='black', label='Desired Trajectory')
+        ax.annotate(str(1), (self.targets[0][0],self.targets[0][1]), textcoords='offset points', xytext= (-3,-4) + (self.targets[0])*30)
         # Plot targets
         for i in range(1,len(self.targets)):
             ax.plot([0, self.targets[i][0]], [0,self.targets[i][1]], marker='o', linestyle='-', color='black')
@@ -170,7 +178,8 @@ class motor_learning:
 
         # Split positions into target sections based on target times
         split_indices = [int(i[2]) for i in self.target_time_index_array]
-        split_indices.remove(0)
+        print(split_indices)
+        split_indices.pop(0)
         split_positions = np.split(self.positions, split_indices)
 
         # print("SPLIT INDICES")
@@ -179,8 +188,10 @@ class motor_learning:
         # print("SPLIT POSITIONS")
         # print(len(split_positions))
         # print(split_positions)
-        RMSD_caption = "RMSD per target"
+        RMSD_caption = "RMSE per target"
 
+        total_distance_square_sum = 0
+        total_divisor = 0
         # Plot all positions by iterating through the split positions
         for i in range(len(self.target_set_times)):
             curr_target = self.target_set_times[i][0]
@@ -202,12 +213,16 @@ class motor_learning:
             # print(f"Distances squared: {distances_squared}")
             # print(f"Max in distance square sum: {max(distances_squared)}")
             distance_square_sum = sum(distances_squared)
+            total_distance_square_sum+=distance_square_sum
             # print(f"Distance square sum: {distance_square_sum}")
             # print(f"Split positions size for target: {len(split_positions[i])}")
             rmsd = math.sqrt(distance_square_sum/len(target_distances))
+            total_divisor += len(target_distances)
             RMSD_caption += f"\nTarget {curr_target}: {'{:.3f}'.format(rmsd)}"
             # print(f"The RMSD for target {curr_target} is {rmsd}")
-            
+        
+        total_rmsd = math.sqrt(total_distance_square_sum/total_divisor)
+        RMSD_caption += f"\nEntire RMSE: {'{:.3f}'.format(total_rmsd)}"
         ax.text(-0.1, 1, RMSD_caption, wrap=True, verticalalignment = 'top', horizontalalignment='right', fontsize=8, transform = ax.transAxes)
 
         avg_velocity = ml.calculate_average_velocity()
@@ -220,7 +235,7 @@ class motor_learning:
 
 
 if __name__ == "__main__":
-    ml = motor_learning("MotorLearning_01_31_2024_17_41_34_Left_XZ_fast.txt")
+    ml = motor_learning("MotorLearning_01_31_2024_17_35_45_Left_XZ_normal.txt")
     print(f"AVERAGE VELOCITY: {ml.calculate_average_velocity()}")
     print(f"MAX VELOCITY: {ml.calculate_max_velocity()}")
     
