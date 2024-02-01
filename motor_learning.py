@@ -133,11 +133,21 @@ class motor_learning:
     def calculate_average_velocity(self) -> int:
         # 1. Store all the differences
         position_diffs = np.diff(self.positions, axis=0)
-        # 2. Find all the distances
+        # 2. Find all the distances by norming each vector
         euclidean_distances = np.linalg.norm(position_diffs, axis=1)
         # 3. Sum to get the distance, and divide by time diff in secs
         time_diff = self.times[-1] - self.times[0]
         return sum(euclidean_distances)/time_diff
+    
+    def calculate_max_velocity(self) -> int:
+        # 1. Store all the differences
+        position_diffs = np.diff(self.positions, axis=0)
+        # 2. Find all the distances by norming each vector
+        euclidean_distances = np.linalg.norm(position_diffs, axis=1)
+        # 3. Find all time diffs
+        time_diffs = np.diff(self.times)
+        all_instant_velocities = euclidean_distances/time_diffs
+        return max(all_instant_velocities)
 
         
     def plot_2d(self) -> None:
@@ -200,8 +210,8 @@ class motor_learning:
 
 
 if __name__ == "__main__":
-    ml = motor_learning("MotorLearning_01_31_2024_17_35_45_Left_XZ_normal.txt")
+    ml = motor_learning("MotorLearning_01_31_2024_17_41_34_Left_XZ_fast.txt")
     print(f"AVERAGE VELOCITY: {ml.calculate_average_velocity()}")
-
+    print(f"MAX VELOCITY: {ml.calculate_max_velocity()}")
     
     ml.plot_2d()
