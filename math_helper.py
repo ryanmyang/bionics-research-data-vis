@@ -12,6 +12,14 @@ def normalize_vectors(vectors, radius):
 
     return normalized_vectors
 
+
+def spherical_to_cartesian(r, p, e):
+    x_s = r * np.sin(e) * np.cos(p)
+    y_s = r * np.sin(e) * np.sin(p)
+    z_s = r * np.cos(e)
+    return [x_s, y_s, z_s]
+
+
 # ====================================
 # =========== POINT TO LINE ===========
 # ====================================

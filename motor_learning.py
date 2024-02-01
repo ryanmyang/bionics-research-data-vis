@@ -53,6 +53,7 @@ class motor_learning:
                 time: float = float(words[0])
                 target: int = int(words[1])
                 speed: str = words[2]
+                speed = 'maximum' if speed == 'fast' else speed
                 pos: list[str] = [float(words[3]),float(words[4]),float(words[5])]
                 # a) Add time
                 self.times.append(time)
@@ -157,10 +158,13 @@ class motor_learning:
         ax = self.fig.add_subplot(111)
         ax.set_aspect('equal', adjustable='box')
         ax.margins(x=0.1,y=0.1)
-        ax.set_title(f"Position of arm for each target\n{self.arm} arm, {self.plane.value} plane, {self.speed_set_times[0][0]} speed", fontsize=10)
+        ax.set_title(f"Motor Learning with {self.speed_set_times[0][0]} speed", fontsize=10)
+        ax.set_ylabel("Y Axis (m)")
+        ax.set_xlabel("X Axis (m)")
 
+        ax.plot([0, self.targets[0][0]], [0,self.targets[0][1]], marker='o', linestyle='-', color='black', label='Desired Trajectory')
         # Plot targets
-        for i in range(len(self.targets)):
+        for i in range(1,len(self.targets)):
             ax.plot([0, self.targets[i][0]], [0,self.targets[i][1]], marker='o', linestyle='-', color='black')
             ax.annotate(str(i+1), (self.targets[i][0],self.targets[i][1]), textcoords='offset points', xytext= (-3,-4) + (self.targets[i])*30)
 
@@ -176,6 +180,7 @@ class motor_learning:
         # print(len(split_positions))
         # print(split_positions)
         RMSD_caption = "RMSD per target"
+
         # Plot all positions by iterating through the split positions
         for i in range(len(self.target_set_times)):
             curr_target = self.target_set_times[i][0]
@@ -203,8 +208,13 @@ class motor_learning:
             RMSD_caption += f"\nTarget {curr_target}: {'{:.3f}'.format(rmsd)}"
             # print(f"The RMSD for target {curr_target} is {rmsd}")
             
-        ax.text(-0.45, 0, RMSD_caption, wrap=True, horizontalalignment='right', fontsize=8)
-        ax.legend(bbox_to_anchor=(1.2, 1))
+        ax.text(-0.1, 1, RMSD_caption, wrap=True, verticalalignment = 'top', horizontalalignment='right', fontsize=8, transform = ax.transAxes)
+
+        avg_velocity = ml.calculate_average_velocity()
+        max_velocity = ml.calculate_max_velocity()
+        velocity_caption = f"Average Velocity: {'{:.3f}'.format(avg_velocity)}\nMax Velocity: {'{:.3f}'.format(max_velocity)}"
+        ax.text(1.05, 0, velocity_caption, wrap=True, ha='left', va='bottom', fontsize=8, transform = ax.transAxes)
+        ax.legend(bbox_to_anchor=(1, 1))
         plt.show()
              
 
